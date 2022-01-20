@@ -1,0 +1,131 @@
+debit1{
+expense['description']; 
+###
+double entry part:
+debit1==expense*
+debit2==tax receivable-1483
+credit1==accounts payable-2620
+###
+
+income[1060]; 
+###
+double entry part:
+debit1 accounts receivable-1060*
+credit1==sales 
+credit2==tax payable-2680
+###
+}
+
+debit2{
+expense[1483]; 
+###
+double entry part:
+debit1==expense
+debit2==tax receivable-1483*
+credit1==accounts payable-2620
+###
+}
+
+debit3{
+expense[2620]; 
+###
+double entry part=='settle one-off expense'
+debit3==accounts payable-2620*
+credit3==withdrawal_bank
+###
+
+income[extract_deposit_bank]; 
+###
+double entry part ='settle one-off sales'
+debit3==deposit_bank*
+debit3==accounts receivable-1060
+###
+
+bank[extract_deposit_bank]; 
+###
+double entry part = 'interbank transfer'
+debit3==deposit_bank*
+credit3==withdrawal_bank
+###
+
+payment[2620]; 
+###
+double entry_part = 'payment instalment'
+debit3==accounts payable-2620*
+credit3==withdrawal_bank
+###
+
+receipt[extract_deposit_bank];
+###
+double entry_part = 'collect instalament'
+debit3==deposit_bank*
+credit3==accounts receivable-1060
+###
+}
+
+credit1{
+expense[2620]; 
+###
+double entry part:
+debit1==expense
+debit2==tax receivable-1483
+credit1==accounts payable-2620*
+###
+
+income['description']; 
+###
+double entry part:
+debit1 accounts receivable-1060
+credit1==sales*
+credit2==tax payable-2680
+###
+}
+
+credit2{
+income[2680]
+###
+double entry part:
+debit1 accounts receivable-1060
+credit1==sales
+credit2==tax payable-2680*
+###
+
+}
+
+credit3{
+expense['extract_withdrawal_bank'];
+###
+double entry part=='settle one-off expense'
+debit3==accounts payable-2620
+credit3==withdrawal_bank*
+###
+
+income[1060];
+###
+double entry part ='settle one-off sales'
+debit3==deposit_bank
+debit3==accounts receivable-1060*
+###
+
+bank[extract_withdrawal_bank]; 
+###
+double entry part = 'interbank transfer'
+debit3==deposit_bank
+credit3==withdrawal_bank*
+###
+
+payment[extract_withdrawal_bank]; 
+###
+double entry_part = 'payment instalment'
+debit3==accounts payable-2620
+credit3==withdrawal_bank*
+###
+
+receipt[1060];
+###
+double entry_part = 'collect instalament'
+debit3==deposit_bank
+credit3==accounts receivable-1060*
+###
+
+}
